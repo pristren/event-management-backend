@@ -5,9 +5,12 @@ const EventSchema = new mongoose.Schema(
       type: String,
       required: false,
     },
-    invitedUserId: [String],
-    event_thermel: {
-      type: String,
+    invitedUserId: {
+      type: [String],
+      required: false,
+    },
+    event_images: {
+      type: [Object],
       required: false,
     },
     event_title: {
@@ -47,17 +50,26 @@ const EventSchema = new mongoose.Schema(
       type: {
         time_start: {
           type: String,
-          required: true,
+          required: false,
         },
         time_end: {
           type: String,
-          required: true,
+          required: false,
         },
       },
       required: true,
     },
     joinedPeople: {
       type: [String],
+      required: false,
+    },
+    sharable: {
+      type: String,
+      enum: ["public", "contract", "private"],
+      default: "private",
+    },
+    anOtherParticipants: {
+      type: Boolean,
       required: false,
     },
   },

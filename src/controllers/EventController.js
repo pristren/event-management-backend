@@ -1,87 +1,16 @@
 const EventModel = require("../models/EventModel");
 
-const event = {
-  userId: "456234532",
-  invitedUserId: ["877777", "7184378920"],
-  event_thermel: "www.image.url",
-  event_title: "This is Event Title",
-  event_Details:
-    "Lorem ipsum dolor sit amet consectetur adipisicing elit. Animi dicta nostrum nihil pariatur inventore quam mollitia expedita asperiores aperiam distinctio, officia doloribus exercitationem quis reprehenderit laboriosam cupiditate perferendis beatae tempore.",
-  event_clubName: "This is Club Name",
-  location: "Pabna, BanglaDesh",
-  mapLocation: {
-    lat: "87ss89sdfsdf",
-    lng: "786da89sd0fs",
-  },
-  event_date: "01-01-2024",
-  event_time: {
-    time_start: "7:00 am",
-    time_end: "10:00 pm",
-  },
-  joinedPeople: ["82734839", "28739"],
-};
-const data = [
-  {
-    _id: "655ca281977540ad77962527",
-    userId: "456234532",
-    invitedUserId: ["877777", "7184378920"],
-    event_thermel: "www.image.url",
-    event_title: "This is Event Title",
-    createdAt: "2023-11-21T12:28:49.037Z",
-    updatedAt: "2023-11-21T12:28:49.037Z",
-    __v: 0,
-  },
-  {
-    _id: "655ca699b0bee16760a39f55",
-    userId: "456234532",
-    invitedUserId: ["877777", "7184378920", "877777534"],
-    event_thermel: "www.image.url",
-    event_title: "This is testing Event Title",
-    createdAt: "2023-11-21T12:46:17.729Z",
-    updatedAt: "2023-11-21T12:46:17.729Z",
-    __v: 0,
-  },
-];
-
 const createEvent = async (req, res) => {
+  const eventData = req.body;
   try {
-    const {
-      userId,
-      invitedUserId, // remove
-      event_thermel,
-      event_title,
-      event_Details,
-      event_clubName,
-      location,
-      mapLocation: { lat, lng },
-      event_date,
-      event_time: { time_start, time_end },
-      joinedPeople,
-    } = req.body;
+    const { userId, event_title, event_Details, event_clubName } = req.body;
 
-    if (
-      !event_thermel ||
-      !userId ||
-      !event_title ||
-      !event_Details ||
-      !event_date ||
-      !event_clubName
-    ) {
-      return res.status(303).send("All field are required!");
+    if (!userId || !event_title || !event_Details || !event_clubName) {
+      return res.status(303).json({ message: "All field are required!" });
     }
 
     const storeData = {
-      userId,
-      invitedUserId,
-      event_thermel,
-      event_title,
-      event_Details,
-      event_clubName,
-      location,
-      mapLocation: { lat, lng },
-      event_date,
-      event_time: { time_start, time_end },
-      joinedPeople,
+      ...eventData,
     };
 
     const event = await EventModel.create(storeData);
