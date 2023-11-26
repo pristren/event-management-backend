@@ -4,27 +4,29 @@ const jwt = require("jsonwebtoken");
 require("dotenv").config();
 
 const registerUser = async (req, res) => {
+  console.log("registerUser ");
   try {
-    const { name, email, password, phone } = req.body;
+    const { firstName, lastName, email, password } = req.body;
 
-    if (!name || !email || !password || !phone) {
-      throw new Error("All field are required!");
+    if (!firstName || !lastName || !email || !password) {
+      return res.status(303).json({ message: "All field are required!" });
     }
 
     // check exasting user
     const exastingUser = await User.findOne({ email });
     if (exastingUser) {
       return res.status(403).json({
-        errorMessage: "User already registered",
+        message: "User already registered",
       });
     }
     // password hash
-    const hashPassowrd = bcrypt.hashSync(password, 12);
+    const hashPassword = bcrypt.hashSync(password, 12);
     const createUser = {
+      firstName,
+      lastName,
       email,
-      password: hashPassowrd,
-      name,
-      phone,
+      password: hashPassword,
+      // phone,
 
       // thumbNail: thumbNail || null,
     };
@@ -41,11 +43,10 @@ const registerUser = async (req, res) => {
       data: {
         accessToken: token,
         user: {
-          name: user.name,
+          firstName: user.firstName,
+          lastName: user.lastName,
           email: user.email,
-          phone: user.phone,
           _id: user._id,
-          thumbNail: user.thumbNail,
           role: user.role,
           createdAt: user.createdAt,
           updatedAt: user.updatedAt,
@@ -53,28 +54,33 @@ const registerUser = async (req, res) => {
       },
     });
   } catch (err) {
+    console.log("registerUser ", err);
     res.status(403).json({
       errorMessage: "There was a problem registering the user",
-      error: err.message,
     });
   }
 };
 
 const loginUser = async (req, res) => {
+  console.log("loginUser");
   try {
     const { email, password } = req.body;
+    console.log("req.body ", { email, password });
 
     if (!email) {
-      throw new Error("Please provide an email");
+      return res.status(303).json("Please provide an email");
     }
     if (!password) {
-      throw new Error("Please provide a password. Password can not be empty!");
+      return res
+        .status(303)
+        .json("Please provide a password. Password can not be empty!");
     }
-    // check exasting user
+    // check existing user
     const user = await User.findOne({ email });
+    console.log("user ", user);
     if (!user) {
       return res.status(404).json({
-        error: "User not found",
+        message: "User not found",
       });
     }
     // Check password
@@ -89,16 +95,15 @@ const loginUser = async (req, res) => {
       expiresIn: "7d",
     });
     // response
-    res.status(200).json({
+    res.status(201).json({
       message: "Welcome back",
       data: {
         accessToken: token,
         user: {
-          name: user.name,
+          firstName: user.firstName,
+          lastName: user.lastName,
           email: user.email,
-          phone: user.phone,
           _id: user._id,
-          // thumbNail: user.thumbNail,
           role: user.role,
           createdAt: user.createdAt,
           updatedAt: user.updatedAt,

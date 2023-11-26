@@ -1,3 +1,6 @@
+// console clear
+console.clear();
+
 const express = require("express");
 const mongoose = require("mongoose");
 const colors = require("colors");
@@ -10,6 +13,7 @@ const app = express();
 
 const authRoute = require("./src/routes/userRoute");
 const customerRoute = require("./src/routes/customerRoute");
+const EventRoute = require("./src/routes/EventRoute");
 
 // User Middlewares
 app.use(cors());
@@ -29,6 +33,7 @@ app.get("/", (req, res) => {
 // Routes
 app.use("/api/v1/user", authRoute);
 app.use("/api/v1/customers", customerRoute);
+app.use("/api/v1/", EventRoute);
 // -----
 // ----------
 // ---------------
