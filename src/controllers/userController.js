@@ -42,15 +42,7 @@ const registerUser = async (req, res) => {
       message: "User created successfully",
       data: {
         accessToken: token,
-        user: {
-          firstName: user.firstName,
-          lastName: user.lastName,
-          email: user.email,
-          _id: user._id,
-          role: user.role,
-          createdAt: user.createdAt,
-          updatedAt: user.updatedAt,
-        },
+        user: user
       },
     });
   } catch (err) {
@@ -99,15 +91,7 @@ const loginUser = async (req, res) => {
       message: "Welcome back",
       data: {
         accessToken: token,
-        user: {
-          firstName: user.firstName,
-          lastName: user.lastName,
-          email: user.email,
-          _id: user._id,
-          role: user.role,
-          createdAt: user.createdAt,
-          updatedAt: user.updatedAt,
-        },
+        user: user
       },
     });
   } catch (err) {
@@ -118,7 +102,41 @@ const loginUser = async (req, res) => {
   }
 };
 
+
+const updateUser = async (req, res) => {
+  const userId = req.params.id;
+
+  try {
+    // Assuming you want to update specific fields only
+    const updates = {
+      firstName: req.body.firstName,
+      lastName: req.body.lastName,
+      email: req.body.email,
+      password: req.body.password,
+      role: req.body.role,
+      phone: req.body.phone,
+      short_bio: req.body.short_bio,
+      connect_account: req.body.connect_account,
+      profile_images: req.body.profile_images,
+      phone_verifiyed: req.body.phone_verifiyed,
+    };
+
+    // Find the user by ID and update the fields
+    const updatedUser = await User.findByIdAndUpdate(userId, updates, { new: true });
+
+    if (!updatedUser) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    res.json(updatedUser);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
 module.exports = {
   registerUser,
   loginUser,
+  updateUser
 };
