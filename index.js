@@ -1,5 +1,5 @@
-// console clear
-console.clear();
+// // console clear
+// console.clear();
 
 const express = require("express");
 const mongoose = require("mongoose");

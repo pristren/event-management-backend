@@ -66,6 +66,24 @@ const invitedInvent = async (req, res) => {
   }
 };
 
+const deleteEvent = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const response = await EventModel.findByIdAndDelete(id);
+
+    res.status(200).json({
+      message: "Event Deleted",
+      data: response,
+    });
+  } catch (err) {
+    console.log("invitedInvent ", err);
+    return res.status(403).json({
+      errorMessage: "There was a problem deleting the events",
+    });
+  }
+};
+
 const eventDetails = async (req, res) => {
   const { id } = req.params;
   console.log("eventDetails id -> ", id);
@@ -133,4 +151,5 @@ module.exports = {
   invitedInvent,
   eventDetails,
   myEvent,
+  deleteEvent,
 };

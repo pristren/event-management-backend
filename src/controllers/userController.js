@@ -42,7 +42,7 @@ const registerUser = async (req, res) => {
       message: "User created successfully",
       data: {
         accessToken: token,
-        user: user
+        user: user,
       },
     });
   } catch (err) {
@@ -91,7 +91,7 @@ const loginUser = async (req, res) => {
       message: "Welcome back",
       data: {
         accessToken: token,
-        user: user
+        user: user,
       },
     });
   } catch (err) {
@@ -102,9 +102,8 @@ const loginUser = async (req, res) => {
   }
 };
 
-
 const updateUser = async (req, res) => {
-  const userId = req.params.id;
+  const { userId } = req.params;
 
   try {
     // Assuming you want to update specific fields only
@@ -119,24 +118,27 @@ const updateUser = async (req, res) => {
       connect_account: req.body.connect_account,
       profile_images: req.body.profile_images,
       phone_verifiyed: req.body.phone_verifiyed,
+      account_type: req.body.account_type,
     };
 
     // Find the user by ID and update the fields
-    const updatedUser = await User.findByIdAndUpdate(userId, updates, { new: true });
+    const updatedUser = await User.findByIdAndUpdate(userId, updates, {
+      new: true,
+    });
 
     if (!updatedUser) {
-      return res.status(404).json({ error: 'User not found' });
+      return res.status(404).json({ error: "User not found" });
     }
 
     res.json(updatedUser);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'Internal server error' });
+    res.status(500).json({ error: "Internal server error" });
   }
 };
 
 module.exports = {
   registerUser,
   loginUser,
-  updateUser
+  updateUser,
 };
