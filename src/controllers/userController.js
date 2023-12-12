@@ -102,6 +102,41 @@ const loginUser = async (req, res) => {
   }
 };
 
+const findAUser = async (req, res) => {
+  const { email } = req.params;
+
+  try {
+    const user = await User.findOne({ email: email });
+    if (user) {
+      res.status(201).json({
+        message: "Welcome back",
+        data: {
+          user,
+        },
+      });
+    }
+  } catch (error) {
+    res.status(500).json({ error: "Error Getting a user" });
+  }
+};
+const findAUserById = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const user = await User.findById(id);
+    if (user) {
+      res.status(201).json({
+        message: "successfull",
+        data: {
+          user,
+        },
+      });
+    }
+  } catch (error) {
+    res.status(500).json({ error: "Error Getting a user" });
+  }
+};
+
 const updateUser = async (req, res) => {
   const { userId } = req.params;
 
@@ -141,4 +176,6 @@ module.exports = {
   registerUser,
   loginUser,
   updateUser,
+  findAUser,
+  findAUserById,
 };

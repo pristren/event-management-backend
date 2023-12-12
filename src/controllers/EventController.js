@@ -20,7 +20,7 @@ const createEvent = async (req, res) => {
       event,
     });
   } catch (err) {
-    console.log("createEvent ", err);
+    // console.log("createEvent ", err);
     res.status(403).json({
       errorMessage: "Server Broken",
     });
@@ -38,7 +38,7 @@ const findAllEvents = async (req, res) => {
       data: events,
     });
   } catch (err) {
-    console.log("findAllEvents ", err);
+    // console.log("findAllEvents ", err);
     return res.status(403).json({
       errorMessage: "There was a problem getting the events",
     });
@@ -47,7 +47,7 @@ const findAllEvents = async (req, res) => {
 
 const invitedInvent = async (req, res) => {
   const { id } = req.params;
-  console.log("invitedInvent id -> ", id);
+  // console.log("invitedInvent id -> ", id);
 
   try {
     const events = await EventModel.find({ invitedUserId: id });
@@ -59,7 +59,7 @@ const invitedInvent = async (req, res) => {
       data: events,
     });
   } catch (err) {
-    console.log("invitedInvent ", err);
+    // console.log("invitedInvent ", err);
     return res.status(403).json({
       errorMessage: "There was a problem getting the events",
     });
@@ -77,7 +77,7 @@ const deleteEvent = async (req, res) => {
       data: response,
     });
   } catch (err) {
-    console.log("invitedInvent ", err);
+    // console.log("invitedInvent ", err);
     return res.status(403).json({
       errorMessage: "There was a problem deleting the events",
     });
@@ -86,7 +86,7 @@ const deleteEvent = async (req, res) => {
 
 const eventDetails = async (req, res) => {
   const { id } = req.params;
-  console.log("eventDetails id -> ", id);
+  // console.log("eventDetails id -> ", id);
 
   try {
     const event = await EventModel.findById(id);
@@ -96,16 +96,46 @@ const eventDetails = async (req, res) => {
       data: event,
     });
   } catch (err) {
-    console.log("eventDetails ", err);
+    // console.log("eventDetails ", err);
     return res.status(403).json({
       errorMessage: "There was a problem getting the events",
     });
   }
 };
 
+const joinAnEvent = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const event = await EventModel.findById(id);
+    // console.log(event);
+    const alreadyJoined = event.joinedPeople;
+    // console.log(alreadyJoined);
+    const newJoined = [...alreadyJoined, req.body?.email];
+    const updated = await EventModel.findByIdAndUpdate(
+      id,
+      {
+        $set: {
+          joinedPeople: newJoined,
+        },
+      },
+      {
+        new: true,
+      }
+    );
+    res.status(200).json({
+      message: "Joined Event",
+      data: updated,
+    });
+  } catch (error) {
+    return res.status(403).json({
+      errorMessage: "There was a problem joining the events",
+    });
+  }
+};
+
 const myEvent = async (req, res) => {
   const { id } = req.params;
-  console.log("invitedInvent id -> ", id);
+  // console.log("invitedInvent id -> ", id);
 
   try {
     let events = {};
@@ -138,7 +168,7 @@ const myEvent = async (req, res) => {
       data: events,
     });
   } catch (err) {
-    console.log("invitedInvent ", err);
+    // console.log("invitedInvent ", err);
     return res.status(403).json({
       errorMessage: "There was a problem getting the events",
     });
@@ -152,4 +182,5 @@ module.exports = {
   eventDetails,
   myEvent,
   deleteEvent,
+  joinAnEvent,
 };

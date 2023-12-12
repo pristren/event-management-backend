@@ -81,6 +81,10 @@ const EventSchema = new mongoose.Schema(
       type: Boolean,
       required: false,
     },
+    category: {
+      type: String,
+      required: true,
+    },
   },
   {
     timestamps: true,
