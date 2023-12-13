@@ -74,8 +74,8 @@ const EventSchema = new mongoose.Schema(
     },
     sharable: {
       type: String,
-      enum: ["public", "contract", "private"],
-      default: "private",
+      enum: ["Public", "Contact", "Private"],
+      default: "Public",
     },
     anOtherParticipants: {
       type: Boolean,

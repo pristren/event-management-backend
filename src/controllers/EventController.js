@@ -22,7 +22,7 @@ const createEvent = async (req, res) => {
   } catch (err) {
     // console.log("createEvent ", err);
     res.status(403).json({
-      errorMessage: "Server Broken",
+      errorMessage: err,
     });
   }
 };
@@ -133,6 +133,41 @@ const joinAnEvent = async (req, res) => {
   }
 };
 
+const addImagesToEvent = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const event = await EventModel.findById(id);
+    // console.log(event);
+    const prevImages = event?.event_images;
+    // console.log(alreadyJoined);
+    const newImages = [...prevImages];
+
+    const images = req.body?.images;
+    images?.forEach((obj) => {
+      newImages.push(obj);
+    });
+    const updated = await EventModel.findByIdAndUpdate(
+      id,
+      {
+        $set: {
+          event_images: newImages,
+        },
+      },
+      {
+        new: true,
+      }
+    );
+    res.status(200).json({
+      message: "Images Added to the Event",
+      data: updated,
+    });
+  } catch (error) {
+    return res.status(403).json({
+      errorMessage: "There was a problem joining the events",
+    });
+  }
+};
+
 const myEvent = async (req, res) => {
   const { id } = req.params;
   // console.log("invitedInvent id -> ", id);
@@ -183,4 +218,5 @@ module.exports = {
   myEvent,
   deleteEvent,
   joinAnEvent,
+  addImagesToEvent,
 };
