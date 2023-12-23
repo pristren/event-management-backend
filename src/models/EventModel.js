@@ -45,11 +45,11 @@ const EventSchema = new mongoose.Schema(
     event_date: {
       type: {
         date_start: {
-          type: String,
+          type: Date,
           required: false,
         },
         date_end: {
-          type: String,
+          type: Date,
           required: false,
         },
       },
@@ -74,8 +74,8 @@ const EventSchema = new mongoose.Schema(
     },
     sharable: {
       type: String,
-      enum: ["Public", "Contact", "Private"],
-      default: "Public",
+      enum: ["public", "contact", "private"],
+      default: "public",
     },
     anOtherParticipants: {
       type: Boolean,

@@ -210,6 +210,26 @@ const myEvent = async (req, res) => {
   }
 };
 
+const updateAnEvent = async (req, res) => {
+  const { id } = req.params;
+  console.log("called");
+  try {
+    const data = req.body;
+    console.log(data);
+    const updated = await EventModel.findByIdAndUpdate(id, data, {
+      new: true,
+    });
+    res.status(200).json({
+      message: "Updated Event",
+      data: updated,
+    });
+  } catch (error) {
+    return res.status(403).json({
+      errorMessage: "There was a problem updating the events",
+    });
+  }
+};
+
 module.exports = {
   createEvent,
   findAllEvents,
@@ -219,4 +239,5 @@ module.exports = {
   deleteEvent,
   joinAnEvent,
   addImagesToEvent,
+  updateAnEvent,
 };
