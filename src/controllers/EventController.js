@@ -27,6 +27,38 @@ const createEvent = async (req, res) => {
   }
 };
 
+const addLike = async (req, res) => {
+  const { id } = req.params;
+  const { alreadyLiked } = req.body;
+  try {
+    const event = await EventModel.findById(id);
+    const alreadyLike = event?.like || 0;
+    const newLike = Number(alreadyLike) + 1;
+    const prevLiked = [...event?.alreadyLiked];
+    prevLiked.push(alreadyLiked);
+    const updated = await EventModel.findByIdAndUpdate(
+      id,
+      {
+        $set: {
+          like: newLike,
+          alreadyLiked: prevLiked,
+        },
+      },
+      {
+        new: true,
+      }
+    );
+    res.status(200).json({
+      message: "Like Added to an Event",
+      data: updated,
+    });
+  } catch (error) {
+    return res.status(403).json({
+      errorMessage: "There was a problem liking the event",
+    });
+  }
+};
+
 const findAllEvents = async (req, res) => {
   try {
     const events = await EventModel.find();
@@ -240,4 +272,5 @@ module.exports = {
   joinAnEvent,
   addImagesToEvent,
   updateAnEvent,
+  addLike,
 };

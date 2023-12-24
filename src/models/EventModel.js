@@ -5,6 +5,15 @@ const EventSchema = new mongoose.Schema(
       type: String,
       required: false,
     },
+    like: {
+      type: Number,
+      required: true,
+      default: 0,
+    },
+    alreadyLiked: {
+      type: [String],
+      required: false,
+    },
     invitedUserId: {
       type: [String],
       required: false,

@@ -8,6 +8,7 @@ const {
   joinAnEvent,
   addImagesToEvent,
   updateAnEvent,
+  addLike,
 } = require("../controllers/EventController");
 
 const router = require("express").Router();
@@ -21,5 +22,6 @@ router.delete("/events/:id", deleteEvent);
 router.put("/join/:id", joinAnEvent);
 router.put("/addImages/:id", addImagesToEvent);
 router.put("/update-event/:id", updateAnEvent);
+router.put("/addLike/:id", addLike);
 
 module.exports = router;
