@@ -208,15 +208,21 @@ const myEvent = async (req, res) => {
     let events = {};
     let total = 0;
 
-    const ownEvents = await EventModel.find({ userId: id });
+    const ownEvents = await EventModel.find({ userId: id })
+      .sort({ _id: -1 })
+      .exec();
     const ownEventsTotal = await EventModel.countDocuments({ userId: id });
 
-    const invitedEvents = await EventModel.find({ invitedUserId: id });
+    const invitedEvents = await EventModel.find({ invitedUserId: id })
+      .sort({ createdAt: "desc" })
+      .exec();
     const invitedEventsTotal = await EventModel.countDocuments({
       invitedUserId: id,
     });
 
-    const joinedEvents = await EventModel.find({ joinedPeople: id });
+    const joinedEvents = await EventModel.find({ joinedPeople: id })
+      .sort({ createdAt: "desc" })
+      .exec();
     const joinedEventsTotal = await EventModel.countDocuments({
       joinedPeople: id,
     });
