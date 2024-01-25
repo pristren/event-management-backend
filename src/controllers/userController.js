@@ -4,7 +4,7 @@ const jwt = require("jsonwebtoken");
 require("dotenv").config();
 
 const registerUser = async (req, res) => {
-  console.log("registerUser ");
+  // console.log("registerUser ");
   try {
     const { firstName, lastName, email, password } = req.body;
 
@@ -46,7 +46,7 @@ const registerUser = async (req, res) => {
       },
     });
   } catch (err) {
-    console.log("registerUser ", err);
+    // console.log("registerUser ", err);
     res.status(403).json({
       errorMessage: "There was a problem registering the user",
     });
@@ -54,10 +54,10 @@ const registerUser = async (req, res) => {
 };
 
 const loginUser = async (req, res) => {
-  console.log("loginUser");
+  // console.log("loginUser");
   try {
     const { email, password } = req.body;
-    console.log("req.body ", { email, password });
+    // console.log("req.body ", { email, password });
 
     if (!email) {
       return res.status(303).json("Please provide an email");
@@ -69,7 +69,7 @@ const loginUser = async (req, res) => {
     }
     // check existing user
     const user = await User.findOne({ email });
-    console.log("user ", user);
+    // console.log("user ", user);
     if (!user) {
       return res.status(404).json({
         message: "User not found",

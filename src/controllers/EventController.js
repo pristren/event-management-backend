@@ -250,10 +250,10 @@ const myEvent = async (req, res) => {
 
 const updateAnEvent = async (req, res) => {
   const { id } = req.params;
-  console.log("called");
+  // console.log("called");
   try {
     const data = req.body;
-    console.log(data);
+    // console.log(data);
     const updated = await EventModel.findByIdAndUpdate(id, data, {
       new: true,
     });
