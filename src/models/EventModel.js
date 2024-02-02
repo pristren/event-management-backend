@@ -80,6 +80,12 @@ const EventSchema = new mongoose.Schema(
     joinedPeople: {
       type: [String],
       required: false,
+      default: [],
+    },
+    joinRejected: {
+      type: [String],
+      required: false,
+      default: [],
     },
     sharable: {
       type: String,

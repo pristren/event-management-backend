@@ -143,11 +143,47 @@ const joinAnEvent = async (req, res) => {
     const alreadyJoined = event.joinedPeople;
     // console.log(alreadyJoined);
     const newJoined = [...alreadyJoined, req.body?.email];
+    const alreadyRejected = event.joinRejected;
+    const newRejected = alreadyRejected.filter(
+      (email) => email !== req.body?.email
+    );
     const updated = await EventModel.findByIdAndUpdate(
       id,
       {
         $set: {
           joinedPeople: newJoined,
+          joinRejected: newRejected,
+        },
+      },
+      {
+        new: true,
+      }
+    );
+    res.status(200).json({
+      message: "Joined Event",
+      data: updated,
+    });
+  } catch (error) {
+    return res.status(403).json({
+      errorMessage: "There was a problem joining the events",
+    });
+  }
+};
+
+const unJoinAnEvent = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const event = await EventModel.findById(id);
+    // console.log(event);
+
+    const alreadyRejected = event.joinRejected;
+
+    const newRejected = [...alreadyRejected, req.body?.email];
+    const updated = await EventModel.findByIdAndUpdate(
+      id,
+      {
+        $set: {
+          joinRejected: newRejected,
         },
       },
       {
@@ -276,6 +312,7 @@ module.exports = {
   myEvent,
   deleteEvent,
   joinAnEvent,
+  unJoinAnEvent,
   addImagesToEvent,
   updateAnEvent,
   addLike,
